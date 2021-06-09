@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
 export class ExperimentalLoggerService implements Logger {
   prefix = 'root';
 
-  constructor(private http: HttpClient) {}
+  constructor( private http: HttpClient) {}
 
   log(message: string) {
     console.log(`${this.prefix} (experimental): ${message}`);

@@ -1,9 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, Injector, inject } from '@angular/core';
 import { LoggerService } from './logger.service';
 import { ExperimentalLoggerService } from './experimental-logger.service';
 import { APP_CONFIG, AppConfig } from './config.token';
-import { config } from 'process';
-import { HttpClient } from '@angular/common/http';
+
+export function loggerFactory(injector: Injector): ExperimentalLoggerService | LoggerService {
+  /**
+   * Changing the value of experimentalEnabled in APP_CONFIG will change which dependency to use
+   */
+  return injector.get(APP_CONFIG).experimentalEnabled ?
+  injector.get(ExperimentalLoggerService) :
+  injector.get(LoggerService);
+}
 
 @Component({
   selector: 'app-root',
@@ -12,15 +19,8 @@ import { HttpClient } from '@angular/common/http';
   providers: [
     {
       provide: LoggerService,
-      useFactory: (config: AppConfig, http: HttpClient) => {
-        return config.experimentalEnabled ? 
-          new ExperimentalLoggerService(http) :
-          new LoggerService()
-      },
-      /**
-       * Changing the value of experimentalEnabled in APP_CONFIG will change which dependency to use
-       */
-      deps: [APP_CONFIG, HttpClient]
+      useFactory: loggerFactory,
+      deps: [Injector]
     }
   ]
 })

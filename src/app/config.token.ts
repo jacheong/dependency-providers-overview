@@ -7,6 +7,8 @@ export interface AppConfig {
 /**
  * The value of creating a provider using a custom injectionToken and interface means that it is possible to pass any typed objects between
  * services or components. This interface can represnt configs or even component states where the component implements this same interface
+ * 
+ * This syntax below is just to make this treeshakable
  */
 export const APP_CONFIG = new InjectionToken<AppConfig>('app.config', {
     providedIn: 'root',
