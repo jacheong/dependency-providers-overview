@@ -2,6 +2,7 @@ import { Component, Injector, inject } from '@angular/core';
 import { LoggerService } from './logger.service';
 import { ExperimentalLoggerService } from './experimental-logger.service';
 import { APP_CONFIG, AppConfig } from './config.token';
+import { LegacyLogger } from './legacy-logger';
 
 export function loggerFactory(injector: Injector): ExperimentalLoggerService | LoggerService {
   /**
@@ -22,6 +23,11 @@ export function loggerFactory(injector: Injector): ExperimentalLoggerService | L
       useFactory: loggerFactory,
       deps: [Injector]
     }
+
+    /**
+     * Mutliple providers for the same dependency below:
+     * use case is where one service needs functionality from two very DIFFERENT services
+     */
   ]
 })
 export class AppComponent {
